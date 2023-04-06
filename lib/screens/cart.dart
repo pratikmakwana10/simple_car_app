@@ -16,9 +16,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   List<CartModel> cartList = [];
 
-  @override
-  void initState() {
-    super.initState();
+  void init(){
     List<String> pol =
         SharedPreferenceUtils.getInstance().getStringList("cartModel") ?? [];
     for (var element in pol) {
@@ -29,7 +27,6 @@ class _CartScreenState extends State<CartScreen> {
     }
 
     calculateCartPrice();
-    // TODO: implement initState
   }
 
   calculateCartPrice() {
@@ -41,8 +38,8 @@ class _CartScreenState extends State<CartScreen> {
       //  print("After - $total");
     }
   }
-
   double total = 0;
+
 
   incrementTotalPrice(int index) {
     calculateCartPrice();
@@ -68,6 +65,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    init();
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade100,
       appBar: AppBar(
@@ -107,7 +105,7 @@ class _CartScreenState extends State<CartScreen> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OrderScreen()),
+          MaterialPageRoute(builder: (context) =>  OrderScreen()),
         );
       },
       child: Container(

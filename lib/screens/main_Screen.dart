@@ -1,52 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_food_app/provider/bottom_navigation_provider.dart';
 import 'package:simple_food_app/screens/cart.dart';
 import 'package:simple_food_app/screens/homepage.dart';
 
 import 'order_Screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class MainScreen extends StatelessWidget {
+  MainScreen({Key? key}) : super(key: key);
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
   final _pagesData = [
-    const Home(),
-    const CartScreen(),
-    const OrderScreen(),
+      Home(),
+     const CartScreen(),
+    OrderScreen(),
   ];
-  int _selectedItem = 0;
 
   @override
   Widget build(BuildContext context) {
+    final screenIndex = Provider.of<screenIndexProvider>(context);
+    int cIndex = screenIndex.fetchCurrentScreenIndex;
     return Scaffold(
       body: Center(
-        child: _pagesData[_selectedItem],
+        child: _pagesData[cIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-               ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.save),
-                label: 'Cart',
-                ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'My order',
-               ),
-          ],
-          currentIndex: _selectedItem,
-          onTap: (setValue) {
-              _selectedItem = setValue;
-            setState(() {
-
-            });
-          }),
+        currentIndex: cIndex,
+        onTap: (value) => screenIndex.updateScreenIndex(value),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.save),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'My order',
+          ),
+        ],
+      ),
     );
   }
 }

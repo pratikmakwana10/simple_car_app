@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_food_app/provider/bottom_navigation_provider.dart';
 import 'package:simple_food_app/screens/homepage.dart';
 import 'package:simple_food_app/screens/main_Screen.dart';
 import 'package:simple_food_app/screens/practice.dart';
@@ -16,15 +18,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-
-      theme: ThemeData(
-       primarySwatch: Colors.blueGrey,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => screenIndexProvider()),
+      ],
+      child: MaterialApp(
+        home: MainScreen(),
+        debugShowCheckedModeBanner: false,
       ),
-
-      home:   MainScreen(),
     );
   }
 }

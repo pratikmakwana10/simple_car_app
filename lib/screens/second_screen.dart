@@ -4,20 +4,15 @@ import 'package:simple_food_app/utility/model_car.dart';
 
 import 'cart.dart';
 
-class SecondScreen extends StatefulWidget {
+class SecondScreen extends StatelessWidget {
   List<Cars> filteredList;
-String title ="";
+String title;
   SecondScreen({
     Key? key,
     required this.filteredList,
     required this.title,
   }) : super(key: key);
 
-  @override
-  State<SecondScreen> createState() => _SecondScreenState();
-}
-
-class _SecondScreenState extends State<SecondScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,20 +31,20 @@ class _SecondScreenState extends State<SecondScreen> {
           ),
         ],
         title: Text(
-          widget.title,
+          title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
       body: ListView.builder(
-        itemCount: widget.filteredList.length,
+        itemCount: filteredList.length,
         itemBuilder: (context, index) {
-          return productDescription(widget.filteredList[index]);
+          return productDescription(filteredList[index],context);
         },
       ),
     );
   }
 
-  Container productDescription(Cars singleCar) {
+  Container productDescription(Cars singleCar,BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.all(10),

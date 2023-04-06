@@ -6,26 +6,22 @@ import 'package:simple_food_app/screens/cart.dart';
 import 'package:simple_food_app/utility/shared_prefs_util.dart';
 import '../utility/model_car.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends StatelessWidget {
   Cars singleCar;
 
   DetailScreen({Key? key, required this.singleCar}) : super(key: key);
 
-  @override
-  State<DetailScreen> createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<DetailScreen> {
   final PageController _pageController = PageController();
+
   int _currentPage = 0;
+
   late Timer timer;
+
   bool isCarAdded = false;
+
   List<CartModel> checkList = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  void init(){
     List<String> chk =
         SharedPreferenceUtils.getInstance().getStringList("cartModel") ?? [];
     for (var element in chk) {
@@ -33,14 +29,13 @@ class _DetailScreenState extends State<DetailScreen> {
       if (kDebugMode) {
         print(element);
       }
-      var singleCar = CartModel.fromJson(car);
-      checkList.add(singleCar);
-      if (singleCar.productName == widget.singleCar.modelName) {
+      var sCar = CartModel.fromJson(car);
+      checkList.add(sCar);
+      if (sCar.productName == singleCar.modelName) {
         isCarAdded = true;
         continue;
       }
-    }
-
+  }
     Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
@@ -58,6 +53,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    init();
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade100,
       appBar: AppBar(
@@ -75,7 +71,7 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ],
         title: Text(
-          widget.singleCar.modelName,
+          singleCar.modelName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -101,34 +97,34 @@ class _DetailScreenState extends State<DetailScreen> {
                   headLineOfProduct(),
                   buildSizedBox5(15),
                   rowFeatures(
-                      "Engine Displacement(cc)", widget.singleCar.engine),
+                      "Engine Displacement(cc)", singleCar.engine),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("MaxPower BHP", widget.singleCar.maxPower),
+                  rowFeatures("MaxPower BHP", singleCar.maxPower),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("MaxTorque NM", widget.singleCar.maxTorque),
+                  rowFeatures("MaxTorque NM", singleCar.maxTorque),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("Body Type", widget.singleCar.bodyType),
+                  rowFeatures("Body Type", singleCar.bodyType),
                   buildSizedBox5(5),
                   buildDivider(),
                   rowFeatures(
                       "Fuel Type",
-                      "${widget.singleCar.fuelType.first} / ${widget.singleCar.fuelType.last}"),
+                      "${singleCar.fuelType.first} / ${singleCar.fuelType.last}"),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("Mileage", widget.singleCar.mileage),
+                  rowFeatures("Mileage", singleCar.mileage),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("Mileage", widget.singleCar.mileage),
+                  rowFeatures("Mileage", singleCar.mileage),
                   buildSizedBox5(5),
                   buildDivider(),
-                  rowFeatures("Safety Rating", widget.singleCar.safetyRating),
+                  rowFeatures("Safety Rating", singleCar.safetyRating),
                   buildSizedBox5(5),
                   buildDivider(),
                   buildSizedBox5(10),
-                  addTOCartButton(),
+                  addTOCartButton(context),
                 ],
               ),
             ),
@@ -147,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     physics: const BouncingScrollPhysics(),
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
-                    children: widget.singleCar.sliderImages
+                    children: singleCar.sliderImages
                         .map((e) => imagePageView(
                               e,
                             ))
@@ -160,7 +156,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Row(
       children: [
         Text(
-          "${widget.singleCar.make}  ${widget.singleCar.modelName}",
+          "${singleCar.make}  ${singleCar.modelName}",
           style: const TextStyle(
               fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -170,7 +166,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: Text(
-                "₹${widget.singleCar.price}",
+                "₹${singleCar.price}",
                 style: const TextStyle(
                     fontSize: 19,
                     color: Colors.black,
@@ -187,23 +183,23 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  InkWell addTOCartButton() {
+  InkWell addTOCartButton(BuildContext context) {
     return InkWell(
         onTap: () {
           if (!isCarAdded) {
             List<String> allCars = SharedPreferenceUtils.getInstance()
                     .getStringList("cartModel") ??
                 [];
-            String singleCar = json.encode(CartModel(
-              widget.singleCar.modelName,
-              widget.singleCar.make,
-              widget.singleCar.image,
-              widget.singleCar.price,
+            String sCar = json.encode(CartModel(
+              singleCar.modelName,
+              singleCar.make,
+              singleCar.image,
+              singleCar.price,
               1,
-              int.parse(widget.singleCar.price) * 1,
+              int.parse(singleCar.price) * 1,
             ));
 
-            allCars.add(singleCar);
+            allCars.add(sCar);
 
             SharedPreferenceUtils.getInstance().setData("cartModel", allCars);
             isCarAdded = true;

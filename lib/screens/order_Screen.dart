@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import '../utility/model_car.dart';
 import '../utility/shared_prefs_util.dart';
 
-class OrderScreen extends StatefulWidget {
-  const OrderScreen({Key? key}) : super(key: key);
+class OrderScreen extends StatelessWidget {
+  OrderScreen({Key? key}) : super(key: key);
 
-  @override
-  State<OrderScreen> createState() => _OrderScreenState();
-}
+  late BuildContext _context;
 
-class _OrderScreenState extends State<OrderScreen> {
   List<CartModel> checkList1 = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  // @override
+  void init(BuildContext context) {
+    _context = context;
+    // provider = Provider.of(context,listen: false);
+  }
+
+  void getOrderList() {
     List<String> chk =
         SharedPreferenceUtils.getInstance().getStringList("OrderList") ?? [];
     for (var element in chk) {
@@ -28,6 +28,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getOrderList();
+    init(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

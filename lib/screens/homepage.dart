@@ -8,39 +8,16 @@ import '../utility/model_car.dart';
 import 'cart.dart';
 import 'second_screen.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Home extends StatelessWidget {
+   Home({Key? key}) : super(key: key);
 
-  @override
-  State<Home> createState() => _HomeState();
-}
 
-List<BrandDetail> brandDetail = [
-  BrandDetail(marutiImageURL, maruti),
-  BrandDetail(hyundaiImageURL, hyundai),
-  BrandDetail(mahindraImageURl, mahindra),
-  BrandDetail(tataImageURl, tata),
-  BrandDetail(toyotaImageURL, toyota),
-];
+  List<CartModel> checkList1 = [];
 
-List<Categories> categories = [
-  Categories(
-      "https://bharathautos.com/wp-content/uploads/2018/04/skoda-premium-hatchback-car-india-pictures-photos-images-snaps-rear-back.jpg",
-      hatchback),
-  Categories(
-      "https://gaadiwaadi.com/wp-content/uploads/2020/07/2020-Lexus-ES.jpg",
-      seden),
-  Categories(
-      "https://images.livemint.com/img/2019/10/16/1600x900/Mercedes_1571218796443.jpg",
-      suv),
-  Categories(
-      "https://stimg.cardekho.com/images/carexteriorimages/630x420/Toyota/Toyota-Vellfire/7024/1563439989810/front-left-side-47.jpg?tr=w-300",
-      muv)
-];
 
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade100,
       appBar: AppBar(title: const Text("Cars"), centerTitle: true, actions: [
@@ -96,17 +73,28 @@ class _HomeState extends State<Home> {
               mainAxisSpacing: 7.0,
               mainAxisExtent: 150),
           itemBuilder: (BuildContext context, int index) {
-            return singleGridItem(index);
+            return singleGridItem(index,context);
           },
         ));
   }
 
-  Widget singleGridItem(int index) {
+  Widget singleGridItem(int index,BuildContext context) {
     List<Cars> filteredList = carsList
         .where((e) => e.bodyType == categories[index].textCategories)
         .toList();
 
     return InkWell(
+      // onPressed: () {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) => ShoppingCardPage()));
+      // },
+      // onDoubleTap: () {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) => SecondScreen(
+      //             filteredList: filteredList,
+      //             title: categories[index].textCategories,
+      //           )));
+      // },
       onTap: () {
         Navigator.push(
             context,
@@ -190,7 +178,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   Widget buildBrandLogo(BrandDetail singleBrandDetail, context) {
     List<Cars> filteredList = carsList
         .where((company) => company.make == singleBrandDetail.textBrand)
@@ -233,7 +220,31 @@ class _HomeState extends State<Home> {
     );
   }
 }
-  /*Container(
+
+List<BrandDetail> brandDetail = [
+  BrandDetail(marutiImageURL, maruti),
+  BrandDetail(hyundaiImageURL, hyundai),
+  BrandDetail(mahindraImageURl, mahindra),
+  BrandDetail(tataImageURl, tata),
+  BrandDetail(toyotaImageURL, toyota),
+];
+
+List<Categories> categories = [
+  Categories(
+      "https://bharathautos.com/wp-content/uploads/2018/04/skoda-premium-hatchback-car-india-pictures-photos-images-snaps-rear-back.jpg",
+      hatchback),
+  Categories(
+      "https://gaadiwaadi.com/wp-content/uploads/2020/07/2020-Lexus-ES.jpg",
+      seden),
+  Categories(
+      "https://images.livemint.com/img/2019/10/16/1600x900/Mercedes_1571218796443.jpg",
+      suv),
+  Categories(
+      "https://stimg.cardekho.com/images/carexteriorimages/630x420/Toyota/Toyota-Vellfire/7024/1563439989810/front-left-side-47.jpg?tr=w-300",
+      muv)
+];
+
+/*Container(
               height: 500,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
